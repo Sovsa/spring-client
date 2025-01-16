@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recipe List</title>
+    <style>
+        /* Base styling to match your existing pages */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8f0;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #fff;
+            background-color: #6ccf5d;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+        .recipe-list-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .recipe-item {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 0;
+        }
+        .recipe-item:last-child {
+            border-bottom: none;
+        }
+        .recipe-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .recipe-description {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.95em;
+        }
+        .view-recipe-btn {
+            background-color: #6ccf5d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .view-recipe-btn:hover {
+            background-color: #5ab84f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Recipes</h1>
+    
+    <div class="recipe-list-container">
+        <div th:if="${#lists.isEmpty(recipes)}">
+            <p>No recipes available. Please add some recipes!</p>
+        </div>
+        
+        <div th:each="recipe : ${recipes}" class="recipe-item">
+            <div class="recipe-name" th:text="${recipe.name}">Recipe Name</div>
+            <div class="recipe-description" th:text="${recipe.description}">A brief description of the recipe.</div>
+            <a th:href="@{/recipes/addrecipe/{id}(id=${recipe.recipeId})}" class="view-recipe-btn">View Recipe</a>
+        </div>
+    </div>
+</body>
+</html>

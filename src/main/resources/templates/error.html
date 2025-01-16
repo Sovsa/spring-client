@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8f0;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #fff;
+            background-color: #6ccf5d;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+        .error-container {
+            display: inline-block; /* Allow container to expand based on content */
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            text-align: left;
+            max-width: 90%; /* Restrict width on very large screens */
+        }
+        .error-message {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .error-details {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+        .back-button {
+            background-color: #6ccf5d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #5ab84f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Error page</h1>
+    <div class="error-container">
+        <div class="error-message">
+            Jahapp! Det här gick ju käpprätt åt helvete
+        </div>
+        <div class="error-details" th:text="${url}">Error details</div>
+        <b>Stacktrace:</b>
+        <div class="error-details" th:text="${exceptionMessage}">Error message</div>
+            <div th:each="stackTrace : ${exception.stackTrace}">
+                <div th:text="${stackTrace}">StackTrace</div>
+            </div>
+        <a href="/" class="back-button">Go Back to Home</a>
+    </div>
+</body>
+</html>

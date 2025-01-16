@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Recipe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8f0;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #fff;
+            background-color: #6ccf5d;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+        form {
+            background-color: #fff;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"],
+        textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            width: 100%;
+        }
+        textarea {
+            resize: none;
+            min-height: 40px;
+            overflow: hidden;
+            width: 100%;
+        }
+        #addInstructionBtn, #addIngredientBtn {
+            background-color: #6ccf5d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        #addInstructionBtn:hover, #addIngredientBtn:hover {
+            background-color: #5ab84f;
+        }
+        button[type="submit"] {
+            background-color: #6ccf5d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .ingredient-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+        .ingredient-field .ingredient-name {
+            flex: 1;
+        }
+        .ingredient-field .ingredient-quantity {
+            flex: 1;
+        }
+        .ingredient-field .ingredient-unit {
+            width: 15%;
+        }
+        .ingredient-field .allergen-checkbox {
+            display: flex;
+            align-items: center;
+        }
+        .remove-ingredient-btn, .remove-instruction-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .remove-ingredient-btn:hover, .remove-ingredient-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to automatically expand the instruction textarea
+            function autoExpandTextarea(textarea) {
+                textarea.style.height = 'auto'; // Reset height
+                textarea.style.height = textarea.scrollHeight + 'px'; // Set to scroll height
+            }
+
+            // Add new instruction field
+            $("#addInstructionBtn").click(function() {
+                // Get current number of instruction fields
+                var fields = $("#instruction-container .instruction-field");
+                var instructionCount = fields.length;
+                var newInstruction = $("#instruction-container .instruction-field:first").clone();
+                newInstruction.find("textarea").val('');
+
+
+                $("#instruction-container").append(newInstruction);
+
+                fields = $("#instruction-container .instruction-field");
+                setIntructionIndices(fields);
+            });
+
+            function setIntructionIndices(fields) {
+                var numberedIndex = 1;
+                $.each(fields, function(index, element) {
+                    var jqueryElement = $(element);
+                    jqueryElement.find("label").text("Instruction " + numberedIndex + ":");
+                    jqueryElement.find("textarea").attr("name", 'instructions[' + numberedIndex + '].text')
+                    numberedIndex++;
+                });
+            }
+
+            // Auto-expand for instruction textareas
+            $("#instruction-container").on("input", "textarea", function() {
+                autoExpandTextarea(this);
+            });
+
+            // Add new ingredient field
+            $("#addIngredientBtn").click(function() {
+                var ingredientCount = $("#ingredient-container .ingredient-field").length;
+
+                var newIngredient = $("#ingredient-container .ingredient-field:first").clone();
+                newIngredient.find("input[type='text']").val('');
+                newIngredient.find("input[type='checkbox']").prop("checked", false);
+                
+                $("#ingredient-container").append(newIngredient);
+
+                var fields = $("#ingredient-container .ingredient-field");
+                setIngredientIndices(fields);
+            });
+
+            function setIngredientIndices(fields) {
+                var numberedIndex = 1;
+                $.each(fields, function(index, element) {
+                    var jqueryElement = $(element);
+                    jqueryElement.find("input[name$='.name']").attr("name", "ingredients[" + numberedIndex + "].name");
+                    jqueryElement.find("input[name$='.isAllergen']").attr("name", "ingredients[" + numberedIndex + "].isAllergen");
+                    jqueryElement.find("input[name$='.quantity']").attr("name", "ingredients[" + numberedIndex + "].quantity");
+                    jqueryElement.find("input[name$='.unit']").attr("name", "ingredients[" + numberedIndex + "].unit");
+                    numberedIndex++;
+                });
+            }
+
+            // Remove ingredient field
+            $(document).on("click", ".remove-ingredient-btn", function() {
+                var ingredientCount = $("#ingredient-container .ingredient-field").length
+                if(ingredientCount <= 1) {
+                    return
+                }
+                $(this).closest(".ingredient-field").remove();
+                var fields = $("#ingredient-container .ingredient-field");
+                setIngredientIndices(fields);
+            });
+
+            // Remove instruction field
+            $(document).on("click", ".remove-instruction-btn", function() {
+                var ingredientCount = $("#instruction-container .instruction-field").length
+                if(ingredientCount <= 1) {
+                    return
+                }
+                $(this).closest(".instruction-field").remove();
+                var fields = $("#instruction-container .instruction-field");
+                setIntructionIndices(fields);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Add a New Recipe</h1>
+    
+    <form th:action="@{/recipes/addrecipe}" th:object="${recipe}" method="post">
+        <input type="hidden" name="recipeId" th:field="*{recipeId}"/>
+        <div>
+            <label for="name">Recipe Name:</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Enter recipe name"/>
+        </div>
+        
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" th:field="*{description}" placeholder="Enter description"></textarea>
+        </div>
+
+        <!-- Instruction Fields -->
+        <div th:if="${instructions.size()}" id="instruction-container">
+            <div th:each="instruction : ${instructions}" class="instruction-field">
+                <label for="instructions">Instruction [[${instruction.index}]]</label>
+                <textarea th:name="'instructions[' + ${instruction.index} + '].text'" th:text="${instruction.instructionText}" placeholder="Enter instruction"></textarea>
+                <button type="button" class="remove-instruction-btn">Remove</button>
+            </div>
+        </div>
+        <div th:unless="${instructions.size()}" id="instruction-container">
+            <div class="instruction-field">
+                <label for="instructions">Instruction 1</label>
+                <textarea name="instructions[1].text" placeholder="Enter instruction"></textarea>
+                <button type="button" class="remove-instruction-btn">Remove</button>
+            </div>
+        </div>
+        <button type="button" id="addInstructionBtn">Add another instruction</button>
+
+        <!-- Ingredient Fields -->
+        <div th:if="${instructions.size()}" id="ingredient-container">
+            <div th:each="ingredient, iterStat : ${ingredients}" class="ingredient-field">
+                <input type="text" th:name="'ingredients[' + ${iterStat.index} + '].name'" th:value="${ingredient.name}" class="ingredient-name" placeholder="Ingredient name"/>
+                <input type="text" th:name="'ingredients[' + ${iterStat.index} + '].quantity'" th:value="${ingredient.amount}" class="ingredient-quantity" placeholder="Quantity"/>
+                <input type="text" th:name="'ingredients[' + ${iterStat.index} + '].unit'" th:value="${ingredient.unit}" class="ingredient-unit" placeholder="Unit"/>
+
+                <div class="allergen-checkbox">
+                    <label>
+                        <input type="checkbox" name="'ingredients[' + ${iterStat.index} + '].isAllergen'" th:checked="${ingredient.allergen}"/>
+                        Allergen
+                    </label>
+                </div>
+
+                <button type="button" class="remove-ingredient-btn">Remove</button>
+            </div>
+        </div>
+        <div th:unless="${instructions.size()}" id="ingredient-container">
+            <div class="ingredient-field">
+                <input type="text" th:name="ingredients[1].name" class="ingredient-name" placeholder="Ingredient name"/>
+                <input type="text" th:name="ingredients[1].quantity" class="ingredient-quantity" placeholder="Quantity"/>
+                <input type="text" th:name="ingredients[1].unit" class="ingredient-unit" placeholder="Unit"/>
+
+                <div class="allergen-checkbox">
+                    <label>
+                        <input type="checkbox" name="ingredients[1].isAllergen"/>
+                        Allergen
+                    </label>
+                </div>
+
+                <button type="button" class="remove-ingredient-btn">Remove</button>
+            </div>
+        </div>
+        <button type="button" id="addIngredientBtn">Add another ingredient</button>
+
+        <div>
+            <button type="submit">Submit Recipe</button>
+        </div>
+    </form>
+</body>
+</html>

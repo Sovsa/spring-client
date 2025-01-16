@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Spring Boot Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f8f0; /* Light background */
+        }
+        .hero {
+            background-color: #6ccf5d; /* Light green */
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 5px solid #4caf50; /* Darker green for contrast */
+        }
+        .features {
+            padding: 20px;
+        }
+        .feature-item {
+            background-color: #e6f9e6; /* Very light green for features */
+            border: 1px solid #6ccf5d; /* Border matching hero */
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #6ccf5d;
+            color: white;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>Vad ska vi äta inatt?</h1>
+        <p>Your one-stop solution for all your dinner needs!</p>
+    </div>
+
+    <div class="container features">
+        <h2>Menu</h2>
+        <ul class="list-group">
+            <li class="list-group-item feature-item"><a href="/recipes/addrecipe">Add recipe</li>
+            <li class="list-group-item feature-item"><a href="/recipes">List recipes</li>
+        </ul>
+    </div>
+
+    <footer class="text-center">
+        <p>&copy; 2024 My Spring Boot Application</p>
+    </footer>
+
+</body>
+</html>
