@@ -7,5 +7,5 @@ COPY pom.xml .
 RUN mvn verify --fail-never
 COPY src ./src
 RUN mvn package
-EXPOSE 8080
+EXPOSE 3001
 ENTRYPOINT ["java","-jar","/home/client-app/target/spring-client-0.0.1-SNAPSHOT.jar"]

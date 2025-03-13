@@ -1,13 +1,11 @@
 package com.crowdcollective.spring_client.model.ingredients;
 
 public record IngredientResponseDTO(Integer id,
-                                    String name,
-                                    boolean allergen,
                                     Float amount,
-                                    String unit) {
+                                    String unit,
+                                    ProduceRequestDTO produce) {
 
     public IngredientResponseDTO() {
-        this(0, "", false, 0f, "");
+        this(0, 0f, "", new ProduceRequestDTO());
     }
-
 }

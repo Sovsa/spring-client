@@ -2,25 +2,11 @@ package com.crowdcollective.spring_client.model.ingredients;
 
 public class IngredientRequestDTO {
 
-    private Integer id;
-    private String name;
-    private boolean allergen;
+    private Integer id; 
     private Float amount;
     private String unit;
+    private Integer produceId;
 
-    
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public boolean isAllergen() {
-        return allergen;
-    }
-    public void setAllergen(boolean allergen) {
-        this.allergen = allergen;
-    }
     public Float getAmount() {
         return amount;
     }
@@ -38,5 +24,11 @@ public class IngredientRequestDTO {
     }
     public void setId(Integer id) {
         this.id = id;
-    }    
+    }
+    public Integer getProduceId() {
+        return produceId;
+    }
+    public void setProduceId(Integer produceId) {
+        this.produceId = produceId;
+    }
 }
