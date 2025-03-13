@@ -1,9 +1,12 @@
 package com.crowdcollective.spring_client.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -11,14 +14,16 @@ import com.crowdcollective.spring_client.model.recipes.RecipeRequestDTO;
 import com.crowdcollective.spring_client.model.recipes.RecipeResponseDTO;
 import com.crowdcollective.spring_client.model.recipes.RecipesResponseDTO;
 
-@Component
+@Service
 public class RecipeRestClient {
 
+    Logger logger = LoggerFactory.getLogger(RecipeRestClient.class);
     private RestClient client;
 
-    public RecipeRestClient() {
+    public RecipeRestClient(@Value("${url.backend}") String restClientUrl) {
+        logger.info(restClientUrl);
         client = RestClient.builder()
-            .baseUrl("http://host.docker.internal:8081")
+            .baseUrl(restClientUrl)
             .build();
     }
 

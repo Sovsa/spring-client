@@ -130,10 +130,6 @@ public class RecipeController {
                 map.computeIfAbsent(index, e -> new IngredientRequestDTO());
                 
                 switch (variableName) {
-                    case "name":
-                        map.get(index).setName(value);
-                        break;
-                
                     case "quantity":
                         map.get(index).setAmount(Float.parseFloat(value));
                         break;
@@ -142,16 +138,12 @@ public class RecipeController {
                         map.get(index).setUnit(value);
                         break;
                     
-                    case "isAllergen":
-                        boolean allergen = value == "on" ? true : false;
-                        map.get(index).setAllergen(allergen);
+                    case "produceId":
+                        map.get(index).setProduceId(Integer.parseInt(value));
                         break;
                 }
             }
         }
-        map.values().stream().forEach(e -> {
-            System.out.println(e.getName());
-        });
 
         return new ArrayList<>(map.values());
     }
